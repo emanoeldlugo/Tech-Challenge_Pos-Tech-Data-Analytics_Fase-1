@@ -1,0 +1,108 @@
+table f_order_items
+	lineageTag: d39d0a77-e3ac-465b-abf6-3326bf0a9a88
+
+	column order_id
+		dataType: string
+		lineageTag: 54a66ed3-a496-4b80-bb71-45a28a85c40f
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_item_id
+		dataType: string
+		lineageTag: 1bd50626-e223-4f40-b272-dabcdb88810f
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: 08991c06-9f9a-4391-bea6-6c836f3ec3f9
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id
+		dataType: string
+		lineageTag: f3c1200c-cb06-4857-9bd8-ebb1b28d074e
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column shipping_limit_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: adb55437-3e0e-4191-a95a-375fc8bb1bdd
+		summarizeBy: none
+		sourceColumn: shipping_limit_date
+
+		variation Variation
+			isDefault
+			relationship: 07a235cc-1cdb-4a1a-a4b9-9530fffcf04f
+			defaultHierarchy: LocalDateTable_09ee2b65-b8ed-4056-aefb-af117d9c1ecb.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column price
+		dataType: double
+		lineageTag: aa677235-aaea-4e9c-b18f-c9c35e95608c
+		summarizeBy: sum
+		sourceColumn: price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column freight_value
+		dataType: double
+		lineageTag: b45b35ed-e7f2-4966-8260-554ff341cfab
+		summarizeBy: sum
+		sourceColumn: freight_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column flg_critico =
+			
+			var state_seller = RELATED(d_sellers[seller_state]) = "SP"
+			var flg_atraso = related(f_orders[fx_atraso_amostra_diagnostica]) = "2+ dias"
+			
+			return state_seller && flg_atraso
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d9a8b17e-c717-4498-a0f0-d80a3eed9f0f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_seller = ```
+			
+			var state_seller = RELATED(d_sellers[seller_state]) 
+			
+			
+			return state_seller
+			```
+		lineageTag: 26237046-cac8-4f04-a798-285d12e8fca7
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_order_items = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"olist_order_items_dataset.csv"),[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Cabeçalhos Promovidos",".",",",Replacer.ReplaceText,{"price", "freight_value"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído",{{"order_id", type text}, {"order_item_id", type text}, {"product_id", type text}, {"seller_id", type text}, {"shipping_limit_date", type datetime}, {"price", type number}, {"freight_value", type number}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

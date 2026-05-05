@@ -1,0 +1,98 @@
+table _medidas
+	lineageTag: f6a3ca26-e7e5-40f2-9971-29b56c82dcd6
+
+	measure pedidos_atraso_taxa = DIVIDE([pedidos_em_atraso], [pedidos_total], 0)
+		formatString: #,0.00%;-#,0.00%;#,0.00%
+		lineageTag: 0c7631d0-236a-4379-8977-43a7b0bbb6d4
+
+	measure pedidos_total = COUNT(f_orders[order_id])
+		formatString: #,0
+		lineageTag: ba96815c-d4a1-4e84-8d9d-7c7d1f605790
+
+	measure pedidos_em_atraso = CALCULATE([pedidos_total], f_orders[flg_atraso] = "Entregue com atraso") * -1
+		formatString: #,0
+		lineageTag: 3d530d87-fb6f-4789-bd10-d2417626cf1b
+
+	measure nps_respondentes = count(f_order_reviews[order_id])
+		formatString: 0
+		lineageTag: c0145a3b-bb82-4a5c-ae07-c715c6f50b70
+
+	measure nps_promotores = CALCULATE([nps_respondentes], f_order_reviews[class_nps] = "PROMOTOR")
+		formatString: 0
+		lineageTag: 6bc2a4f2-146b-4afc-b1f8-381bbc1e195c
+
+	measure nps_detratores = ```
+			CALCULATE([nps_respondentes], f_order_reviews[class_nps] = "DETRATOR") 
+			```
+		formatString: 0
+		lineageTag: 50adae52-ed88-402e-af83-2383b87599a1
+
+	measure nps =
+			
+			var per_promotor = DIVIDE([nps_promotores], [nps_respondentes], 0) * 100
+			var per_detrator = DIVIDE([nps_detratores], [nps_respondentes], 0) * 100
+			
+			return per_promotor - per_detrator
+		formatString: #,0.00
+		lineageTag: 0e5528bb-54fa-4cea-94f5-06746ff1b2e8
+
+	measure receita = SUM(f_order_items[price])
+		lineageTag: feee711f-4585-40bd-a743-2f5b8eead8a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure receita_em_risco = CALCULATE([receita], f_order_reviews[class_nps] = "DETRATOR")
+		lineageTag: c65ce3ea-df1b-4e8d-bc61-95baef8177d1
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure receita_em_risco_% = DIVIDE([receita_em_risco], [receita],0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8643e477-1b0a-4899-82f8-0143323d4972
+
+	measure qtd_reviews = COUNT(f_order_reviews[review_id])
+		formatString: 0
+		lineageTag: b1191765-bdcc-4280-84aa-0965243c0ba4
+
+	measure nps_medio_total = CALCULATE([nps], REMOVEFILTERS(f_geolocation), REMOVEFILTERS(d_sellers))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 9daca1ce-9f74-44a3-ad19-988cbeb64191
+
+	measure nps_medio_acima_abaixo_cor = IF([nps] >= [nps_medio_total], "#8BDF85", "#E68F96")
+		lineageTag: 9ca65e95-bb58-4406-af47-952d3bb7d617
+
+	measure qtd_clientes = DISTINCTCOUNT(f_orders[customer_id])
+		formatString: 0
+		lineageTag: 83b2897f-a838-4b3a-a068-993ab1716446
+
+	measure pedidos_em_atraso_positivo = ```
+			CALCULATE([pedidos_total], f_orders[flg_atraso] = "Entregue com atraso") 
+			```
+		formatString: 0
+		lineageTag: a168d882-b208-412e-b691-832082e138bb
+
+	measure pedidos_atraso_taxa_positiva = DIVIDE([pedidos_em_atraso_positivo], [pedidos_total], 0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3425f272-09c3-4fc8-b983-83be2a49e43f
+
+	measure qtd_vendedores_nps_negativo = CALCULATE(count(d_sellers[seller_id]), FILTER(d_sellers, [nps_detratores] > 0))
+		formatString: 0
+		lineageTag: 15a56a2f-c1ee-487d-9577-888481b05d01
+
+	column Column
+		formatString: 0
+		lineageTag: 82c370ff-39c7-4102-a5ad-e0cf3eb93740
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 85e12ede5e6c44d4837366834fce1188
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,60 @@
+table d_sellers
+	lineageTag: 87b94c81-e3db-458a-ad5c-e68ca1fc5990
+
+	column seller_id
+		dataType: string
+		lineageTag: 2e77797e-4379-45f9-9b42-63092c93c642
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_zip_code_prefix
+		dataType: string
+		lineageTag: 377a03a0-556a-4289-87ee-32ef1234026d
+		summarizeBy: none
+		sourceColumn: seller_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_city
+		dataType: string
+		lineageTag: ffff5b2a-182a-47fb-9738-f95ffd2135fe
+		summarizeBy: none
+		sourceColumn: seller_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_state
+		dataType: string
+		lineageTag: 0c6b4d9c-3939-4d0d-b20d-d3a048bc8101
+		summarizeBy: none
+		sourceColumn: seller_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id_aux
+		dataType: int64
+		formatString: 0
+		lineageTag: f2075dc8-4905-4c33-9c02-d595df3befab
+		summarizeBy: none
+		sourceColumn: seller_id_aux
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_sellers = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"olist_sellers_dataset.csv"),[Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"seller_id", type text}, {"seller_zip_code_prefix", type text}, {"seller_city", type text}, {"seller_state", type text}}),
+				    #"Índice Adicionado" = Table.AddIndexColumn(#"Tipo Alterado", "Índice", 1, 1, Int64.Type),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Índice Adicionado",{{"Índice", "seller_id_aux"}})
+				in
+				    #"Colunas Renomeadas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

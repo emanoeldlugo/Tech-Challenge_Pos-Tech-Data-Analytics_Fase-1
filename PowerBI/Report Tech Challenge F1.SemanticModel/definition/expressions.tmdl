@@ -1,0 +1,7 @@
+expression Pasta = "G:\Meu Drive\Pós-Tech - Data Analytics\Fase 1\Tech Challenge\Data\Raw\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3772ff5a-b86e-442e-844c-6fa68542820e
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Text
+

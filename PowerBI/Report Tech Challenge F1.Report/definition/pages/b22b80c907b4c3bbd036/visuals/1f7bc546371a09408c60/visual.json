@@ -1,0 +1,236 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "1f7bc546371a09408c60",
+  "position": {
+    "x": 641.42857142857144,
+    "y": 385.71428571428572,
+    "z": 9000,
+    "height": 227.14285714285717,
+    "width": 227.14285714285717,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_medidas_prescritiva"
+                    }
+                  },
+                  "Property": "receita_em_risco_critico"
+                }
+              },
+              "queryRef": "_medidas_prescritiva.receita_em_risco_critico",
+              "nativeQueryRef": "Receita em Risco",
+              "displayName": "Receita em Risco"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_medidas_prescritiva"
+                    }
+                  },
+                  "Property": "receita_em_risco_diferença"
+                }
+              },
+              "queryRef": "_medidas_prescritiva.receita_em_risco_diferença1",
+              "nativeQueryRef": "Diminuição Receita em Risco",
+              "displayName": "Diminuição Receita em Risco"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_medidas_prescritiva"
+                    }
+                  },
+                  "Property": "receita_em_risco_diferença_%"
+                }
+              },
+              "queryRef": "_medidas_prescritiva.receita_em_risco_diferença",
+              "nativeQueryRef": "% Diferença Receita em Risco",
+              "displayName": "% Diferença Receita em Risco"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_medidas_prescritiva"
+                  }
+                },
+                "Property": "receita_em_risco_critico"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#259B20'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_medidas_prescritiva.receita_em_risco_diferença"
+          }
+        },
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#259B20'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_medidas_prescritiva.receita_em_risco_diferença1"
+          }
+        },
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "2L"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_medidas_prescritiva.receita_em_risco_critico"
+          }
+        }
+      ],
+      "layout": [
+        {
+          "properties": {
+            "orientation": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "''"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a4f70c2b80d2b4cb0936",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_medidas_prescritiva"
+              }
+            },
+            "Property": "receita_em_risco_critico"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6256068233c65210be6a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_medidas_prescritiva"
+              }
+            },
+            "Property": "receita_em_risco_diferença"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4a6fa59310d8db21a951",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_medidas_prescritiva"
+              }
+            },
+            "Property": "receita_em_risco_diferença_%"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

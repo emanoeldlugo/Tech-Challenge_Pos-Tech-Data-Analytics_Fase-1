@@ -1,0 +1,33 @@
+table d_regioes
+	lineageTag: d170e703-3f7f-4a74-aecc-f294c12fc768
+
+	column Região
+		dataType: string
+		lineageTag: 6ec0f09f-46a4-4048-87b1-c0f979cf964e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Região
+
+		annotation SummarizationSetBy = Automatic
+
+	column UF
+		dataType: string
+		lineageTag: 046380c2-ebe8-4789-82d8-da6316c08d48
+		summarizeBy: none
+		sourceColumn: UF
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_regioes = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("bdFLDoMgEIDhu7C2h0BqjabIZMadcSc7UxMf91erbZiB5f/BQAhdp5ppXr3KlDaqz4IEnpYlaJboeCLL9r86+OU67S0l11JMIcVGeyCPJJqCSgo2UuiaMv6zztPD3fp8pbR0KbVtUumrtP0uKiTYUgDWAghuGM/HYBBIQdDxff0O", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Região = _t, UF = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Região", type text}, {"UF", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

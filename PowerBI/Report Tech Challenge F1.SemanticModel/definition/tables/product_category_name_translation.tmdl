@@ -1,0 +1,32 @@
+table product_category_name_translation
+	lineageTag: 8b0afe09-fbb0-40c1-8b0a-ebe5952e9146
+
+	column product_category_name
+		dataType: string
+		lineageTag: ca61447b-8477-4bc1-bbc3-79d798c1272d
+		summarizeBy: none
+		sourceColumn: product_category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_category_name_english
+		dataType: string
+		lineageTag: 1a0d4729-c2d7-47bf-aed6-8d1666b9b826
+		summarizeBy: none
+		sourceColumn: product_category_name_english
+
+		annotation SummarizationSetBy = Automatic
+
+	partition product_category_name_translation = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"product_category_name_translation.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true])
+				in
+				    #"Cabeçalhos Promovidos"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

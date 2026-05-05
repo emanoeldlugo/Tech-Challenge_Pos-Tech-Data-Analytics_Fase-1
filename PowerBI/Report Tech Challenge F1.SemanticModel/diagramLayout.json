@@ -1,0 +1,182 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 317.10941899999989,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1572.7950373461561,
+            "y": 16.996806521392354
+          },
+          "nodeIndex": "product_category_name_translation",
+          "nodeLineageTag": "8b0afe09-fbb0-40c1-8b0a-ebe5952e9146",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1959.9973780738449,
+            "y": 0
+          },
+          "nodeIndex": "_medidas",
+          "nodeLineageTag": "f6a3ca26-e7e5-40f2-9971-29b56c82dcd6",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1073.71646263988,
+            "y": 442.54697325118116
+          },
+          "nodeIndex": "f_order_items",
+          "nodeLineageTag": "d39d0a77-e3ac-465b-abf6-3326bf0a9a88",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 573.79910589313909,
+            "y": 449.17998122637067
+          },
+          "nodeIndex": "f_orders",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 614.48600175354159,
+            "y": 904.96722023159475
+          },
+          "nodeIndex": "d_customers",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1163.0805843504361,
+            "y": 920.434454700203
+          },
+          "nodeIndex": "f_geolocation",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 601.03579244465652,
+            "y": 62.984570498643365
+          },
+          "nodeIndex": "f_order_payments",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 69.51769719672015,
+            "y": 443.53483846484721
+          },
+          "nodeIndex": "f_order_reviews",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1059.1249658870977,
+            "y": 5.5824447712268466
+          },
+          "nodeIndex": "d_products",
+          "size": {
+            "height": 297.5801011485521,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1582.7646569696981,
+            "y": 478.07416268502828
+          },
+          "nodeIndex": "d_sellers",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 118.76808661083464,
+            "y": 48.460521264682825
+          },
+          "nodeIndex": "d_calendar",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 1167.4661814846349,
+            "y": 1239.0634773950537
+          },
+          "nodeIndex": "d_regioes",
+          "nodeLineageTag": "d170e703-3f7f-4a74-aecc-f294c12fc768",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 2388.961983680404,
+            "y": 583.53173869752686
+          },
+          "nodeIndex": "_medidas_prescritiva",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 56.447393005377769,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

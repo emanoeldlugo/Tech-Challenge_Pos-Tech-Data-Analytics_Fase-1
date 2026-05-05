@@ -1,0 +1,82 @@
+table _medidas_prescritiva
+	lineageTag: b0a70b7b-251f-4b63-b615-a4de90c488b8
+
+	measure nps_detratores_critico = ```
+			CALCULATE([nps_respondentes], f_order_reviews[class_nps_ajustado_regiao] = "DETRATOR") 
+			```
+		formatString: 0
+		lineageTag: cc420add-8aa7-4167-9aff-ac158063a745
+
+	measure nps_promotores_critico = CALCULATE([nps_respondentes], f_order_reviews[class_nps_ajustado_regiao] = "PROMOTOR")
+		formatString: 0
+		lineageTag: 7ecd8c70-77cb-441b-97bb-a86873ebfb0f
+
+	measure nps_critico = DIVIDE([nps_promotores_critico] - [nps_detratores_critico], [nps_respondentes], 0) * 100
+		formatString: 0.00
+		lineageTag: 79c318fc-8e85-49d7-b83f-ef4431b9c461
+
+	measure receita_em_risco_critico = CALCULATE([receita], f_order_reviews[class_nps_ajustado_regiao] = "DETRATOR")
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 6e5e99a9-8294-430d-8552-fe1c1012b0cc
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure receita_em_risco_diferença_% = [receita_em_risco_critico] / [receita_em_risco] - 1
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 9ff0856f-b7dc-4676-8717-c9e5aa612495
+
+	measure receita_em_risco_diferença = ```
+			[receita_em_risco] - [receita_em_risco_critico] 
+			```
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 176580fb-a540-427b-b62e-c4f10263495c
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure nps_projecao_conservador =
+			
+			var p = DIVIDE([nps_promotores], [nps_respondentes], 0) * 100
+			var d = DIVIDE([nps_detratores] - 230, [nps_respondentes], 0) * 100
+			
+			return p - d
+		lineageTag: c549c50b-166e-4b31-829a-83c02cf0abf8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure nps_projecao_moderado =
+			
+			var p = DIVIDE([nps_promotores] + 115, [nps_respondentes], 0) * 100
+			var d = DIVIDE([nps_detratores] - 230, [nps_respondentes], 0) * 100
+			
+			return p - d
+		lineageTag: 1d6c06c4-1125-4680-8d4f-a6af69024c20
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure nps_projecao_otimista =
+			
+			var p = DIVIDE([nps_promotores] + 230, [nps_respondentes], 0) * 100
+			var d = DIVIDE([nps_detratores] - 230, [nps_respondentes], 0) * 100
+			
+			return p - d
+		lineageTag: 02ff8beb-5503-45ef-bfd9-92e80c421ea0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		formatString: 0
+		lineageTag: bcce8b77-8e8e-4c8f-9c7c-75df97b14725
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _medidas_prescritiva = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = f13b2b18c9664e699a4c111dca731162
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,80 @@
+table d_calendar
+	lineageTag: c211a290-ea73-4e2a-b944-164b5102fc05
+
+	column Date
+		formatString: General Date
+		lineageTag: f8ba23c6-a7a4-4d1e-8a0d-e9138adcc268
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: e5a783d4-3d45-4a64-8ee4-f191b5b39f5c
+			defaultHierarchy: LocalDateTable_877d8000-1a5e-40e0-962f-7d7b3b39af33.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column year = [Date].[Ano]
+		formatString: 0
+		lineageTag: 4be11ef6-da4b-41d1-8121-01209905c0e3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column month = [Date].[Mês]
+		lineageTag: cee83eb0-ac7b-48b1-a1f4-f019e8f8e106
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column monthno = [Date].[MonthNo]
+		formatString: 0
+		lineageTag: 4e64b7e6-5ab3-4844-b27a-c9ee6a7c0dc5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_day_month = DATE([Date].[Ano], [Date].[MonthNo], 1)
+		formatString: General Date
+		lineageTag: 950a9ba9-96dc-4521-a6b2-e7af7faef662
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 32685e73-1c7d-4299-92fc-16c2aa6404f7
+			defaultHierarchy: LocalDateTable_abbe6e3d-3bd9-4511-b5ef-ecddd9c0d9c0.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'year.month' = [year] & "." & FORMAT([monthno], "00")
+		lineageTag: 9ed73ca4-b511-467f-a443-54020ad3229a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter = [Date].[Trimestre]
+		lineageTag: 3e50f7e1-fc3b-4915-a05b-edeffa31deac
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarterno = [Date].[QuarterNo]
+		formatString: 0
+		lineageTag: 948b2e82-c5e0-4013-b6b3-7b1df044a90a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'year.quarter' = [year] & "." & FORMAT([quarterno], "00")
+		lineageTag: e7bb2320-8c39-416c-95b7-a0a70fc8fb09
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition d_calendar = calculated
+		mode: import
+		source = CALENDARAUTO()
+
+	annotation PBI_Id = 093442dd3a24486885337c6d9bc65a1d
+

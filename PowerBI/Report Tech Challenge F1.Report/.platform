@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Report Tech Challenge F1"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c417ebd2-6027-4a0c-8697-3e09cb6c6a6e"
+  }
+}

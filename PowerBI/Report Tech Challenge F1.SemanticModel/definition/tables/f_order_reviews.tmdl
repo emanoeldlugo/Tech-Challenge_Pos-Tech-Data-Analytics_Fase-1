@@ -1,0 +1,120 @@
+table f_order_reviews
+	lineageTag: aaccd124-443f-48a7-8dc4-70cb36fe0940
+
+	column review_id
+		dataType: string
+		lineageTag: 4dcd9d1c-05a9-4ce9-b34b-8cde8213a3ef
+		summarizeBy: none
+		sourceColumn: review_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 7d04f242-9d1b-44fb-ba6c-39df87c1296a
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 2fcd2c52-4b57-445e-971d-29e69adf6732
+		summarizeBy: sum
+		sourceColumn: review_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_comment_title
+		dataType: string
+		lineageTag: 90020348-3076-4285-b38a-4d57511d2535
+		summarizeBy: none
+		sourceColumn: review_comment_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_comment_message
+		dataType: string
+		lineageTag: 3165de04-ecfb-440d-82a4-58c292297206
+		summarizeBy: none
+		sourceColumn: review_comment_message
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_creation_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d30a7c4e-9994-4f88-8a5f-b7fe3bb3a95f
+		summarizeBy: none
+		sourceColumn: review_creation_date
+
+		variation Variation
+			isDefault
+			relationship: 65e0b495-37bc-4e42-8b2f-7c0c84a25fa7
+			defaultHierarchy: LocalDateTable_164bc7b6-adb5-4989-a7ca-8313f5141cfd.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_answer_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 47435340-4371-4361-894b-ec8a0173aa6d
+		summarizeBy: none
+		sourceColumn: review_answer_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 07357d36-677a-42b2-b08f-025d9dd8d03a
+			defaultHierarchy: LocalDateTable_14c414e7-40e0-423e-ba68-98be87b0344c.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column class_nps
+		dataType: string
+		lineageTag: cb4343d7-567c-4e2a-8e0d-26718667db67
+		summarizeBy: none
+		sourceColumn: class_nps
+
+		annotation SummarizationSetBy = Automatic
+
+	column class_nps_ajustado_regiao =
+			
+			VAR state_seller =
+			    CALCULATE(
+			        MAX(f_order_items[state_seller]),
+			        FILTER(
+			            f_order_items,
+			            f_order_items[order_id] = f_order_reviews[order_id]
+			        )
+			    ) = "SP"
+			VAR flg_atraso = RELATED(f_orders[fx_atraso_amostra_diagnostica]) = "2+ dias"
+			
+			RETURN IF(state_seller && flg_atraso, "PROMOTOR", f_order_reviews[class_nps])
+		lineageTag: a0ba232c-d4dd-4506-a8d8-cdbf7887dd02
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column flg_critico
+		type: calculated
+		lineageTag: 74801e58-f092-4aa7-bcc2-e373569ed350
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_order_reviews = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"olist_order_reviews_dataset.csv"),[Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"review_id", type text}, {"order_id", type text}, {"review_score", Int64.Type}, {"review_comment_title", type text}, {"review_comment_message", type text}, {"review_creation_date", type datetime}, {"review_answer_timestamp", type datetime}}),
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Tipo Alterado", "class_nps", each if [review_score] = 5 then "PROMOTOR" else if [review_score] = 4 then "NEUTRO" else if [review_score] = 3 then "DETRATOR" else if [review_score] = 2 then "DETRATOR" else if [review_score] = 1 then "DETRATOR" else null)
+				in
+				    #"Coluna Condicional Adicionada"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

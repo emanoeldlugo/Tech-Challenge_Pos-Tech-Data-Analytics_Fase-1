@@ -1,0 +1,164 @@
+table f_orders
+	lineageTag: b3de5584-447c-4ad1-8625-8859cc20515e
+
+	column order_id
+		dataType: string
+		lineageTag: 5d257fd7-fb66-4052-a978-4093f067db7a
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: e1fdaa74-ab62-456a-9b49-e44126d6fe20
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_status
+		dataType: string
+		lineageTag: 76f0d417-a678-455a-94bf-466fafed36e3
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_purchase_timestamp
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 61b27a5a-8800-4d63-8dc4-10c150eeecb3
+		summarizeBy: none
+		sourceColumn: order_purchase_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column order_approved_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 496a523c-d10e-45a6-be78-e213fed3531a
+		summarizeBy: none
+		sourceColumn: order_approved_at
+
+		variation Variation
+			isDefault
+			relationship: 42307cd5-d0c3-47f3-996c-ba0ab6183d1c
+			defaultHierarchy: LocalDateTable_b1cf5133-7caa-47ae-9781-640d5319f462.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_delivered_carrier_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 87a458fc-3a86-45db-895c-11cc24982c1f
+		summarizeBy: none
+		sourceColumn: order_delivered_carrier_date
+
+		variation Variation
+			isDefault
+			relationship: d4416007-f463-4956-9d22-52482c8d1dd3
+			defaultHierarchy: LocalDateTable_1503276f-75f2-48f7-8ff1-f2818c5687f6.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_delivered_customer_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 86a40baf-cdee-4111-94e6-fb0adb10298b
+		summarizeBy: none
+		sourceColumn: order_delivered_customer_date
+
+		variation Variation
+			isDefault
+			relationship: 131dd3ee-6117-4bd7-a617-d0e244f77a0a
+			defaultHierarchy: LocalDateTable_3d84185b-c255-48e7-ab3b-f9b01f21dfc3.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_estimated_delivery_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e0fd8b70-d8f1-4ae6-ba1c-bab4b54e03a2
+		summarizeBy: none
+		sourceColumn: order_estimated_delivery_date
+
+		variation Variation
+			isDefault
+			relationship: aeba3c44-5729-4b61-8f5b-ab7eada7eb16
+			defaultHierarchy: LocalDateTable_ebf4f305-f516-43b7-ac85-2cb74a0b1221.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column flg_atraso
+		dataType: string
+		lineageTag: 82d4c308-8626-4b26-9dfa-cd1fba7af2fb
+		summarizeBy: none
+		sourceColumn: flg_atraso
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_compras =
+			
+			var customer = [customer_id]
+			
+			RETURN CALCULATE(count(f_orders[order_id]), d_customers[customer_id] = customer)
+		formatString: 0
+		lineageTag: 350340f4-f562-4440-8b0c-f4caf40c533e
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column dif_entregue_estimado
+		dataType: int64
+		formatString: 0
+		lineageTag: 2648980e-68b7-4c17-81fa-03fe2384b560
+		summarizeBy: sum
+		sourceColumn: dif_entregue_estimado
+
+		annotation SummarizationSetBy = Automatic
+
+	column fx_atraso
+		dataType: string
+		lineageTag: a401cd9a-c474-408b-a4d1-ab360ac8ef10
+		summarizeBy: none
+		sourceColumn: fx_atraso
+
+		annotation SummarizationSetBy = Automatic
+
+	column fx_atraso_amostra_diagnostica
+		dataType: string
+		lineageTag: d9b1ec04-0679-427e-a4bf-ed2a216bb388
+		summarizeBy: none
+		sourceColumn: fx_atraso_amostra_diagnostica
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_orders = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"olist_orders_dataset.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"order_id", type text}, {"customer_id", type text}, {"order_status", type text}, {"order_purchase_timestamp", type datetime}, {"order_approved_at", type datetime}, {"order_delivered_carrier_date", type datetime}, {"order_delivered_customer_date", type datetime}, {"order_estimated_delivery_date", type datetime}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each [order_approved_at] >= #datetime(2017, 1, 1, 0, 0, 0) and [order_approved_at] <= #datetime(2018, 8, 30, 0, 0, 0)),
+				    #"Linhas Filtradas1" = Table.SelectRows(#"Linhas Filtradas", each ([order_status] = "delivered")),
+				    #"Linhas Filtradas2" = Table.SelectRows(#"Linhas Filtradas1", each [order_delivered_customer_date] <> null and [order_delivered_customer_date] <> ""),
+				    #"Personalização Adicionada" = Table.AddColumn(#"Linhas Filtradas2", "flg_atraso", each if [order_estimated_delivery_date] - Date.StartOfDay([order_delivered_customer_date]) >= #duration(0,0,0,0)
+				then "Entregue no prazo"
+				else "Entregue com atraso"),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Personalização Adicionada",{{"order_purchase_timestamp", type date}}),
+				    #"Personalização Adicionada1" = Table.AddColumn(#"Tipo Alterado1", "dif_entregue_estimado", each [order_delivered_customer_date] - [order_estimated_delivery_date]),
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Personalização Adicionada1", "fx_atraso", each if [dif_entregue_estimado] > #duration(15, 0, 0, 0) then "15+ dias" else if [dif_entregue_estimado] > #duration(0, 0, 0, 0) then Text.From(Duration.Days([dif_entregue_estimado])) &" dias" else if [dif_entregue_estimado] <= #duration(0, 0, 0, 0) then "Entregue no Prazo" else null, type text),
+				    #"Coluna Condicional Adicionada2" = Table.AddColumn(#"Coluna Condicional Adicionada", "fx_atraso_amostra_diagnostica", each if [dif_entregue_estimado] > #duration(2, 0, 0, 0) then "2+ dias" else if [dif_entregue_estimado] > #duration(0, 0, 0, 0) then Text.From(Duration.Days([dif_entregue_estimado])) &" dias" else if [dif_entregue_estimado] <= #duration(0, 0, 0, 0) then "Entregue no Prazo" else null),
+				
+				    #"Dias Extraídos" = Table.TransformColumns(#"Coluna Condicional Adicionada2",{{"dif_entregue_estimado", Duration.Days, Int64.Type}})
+				in
+				    #"Dias Extraídos"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

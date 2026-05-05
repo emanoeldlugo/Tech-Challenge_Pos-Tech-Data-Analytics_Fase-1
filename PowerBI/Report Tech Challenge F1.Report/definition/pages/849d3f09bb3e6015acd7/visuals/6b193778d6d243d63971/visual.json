@@ -1,0 +1,140 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "6b193778d6d243d63971",
+  "position": {
+    "x": 1045.1388952467178,
+    "y": 45.2499877081977,
+    "z": 3000,
+    "height": 205.55555555555554,
+    "width": 227.77777777777777,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "d_regioes"
+                    }
+                  },
+                  "Property": "Região"
+                }
+              },
+              "queryRef": "d_regioes.Região",
+              "nativeQueryRef": "Região"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_medidas"
+                    }
+                  },
+                  "Property": "nps"
+                }
+              },
+              "queryRef": "_medidas.nps",
+              "nativeQueryRef": "NPS",
+              "displayName": "NPS"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_medidas"
+                  }
+                },
+                "Property": "nps"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "122.11110183701607D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "d_regioes.Região"
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Default'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c7502a03ea5a11e8559b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "d_regioes"
+              }
+            },
+            "Property": "Região"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8d864cc83b022459b579",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_medidas"
+              }
+            },
+            "Property": "nps"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

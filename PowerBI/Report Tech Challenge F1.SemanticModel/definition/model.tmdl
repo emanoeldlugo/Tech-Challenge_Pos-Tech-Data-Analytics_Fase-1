@@ -1,0 +1,40 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+annotation PBI_QueryOrder = ["Pasta","f_orders","f_order_items","d_customers","f_geolocation","f_order_payments","f_order_reviews","d_products","d_sellers","product_category_name_translation","d_regioes"]
+
+ref table f_orders
+ref table DateTableTemplate_02e08216-fc23-40db-9aea-4ba9ce79f5bc
+ref table LocalDateTable_b1cf5133-7caa-47ae-9781-640d5319f462
+ref table LocalDateTable_1503276f-75f2-48f7-8ff1-f2818c5687f6
+ref table LocalDateTable_3d84185b-c255-48e7-ab3b-f9b01f21dfc3
+ref table LocalDateTable_ebf4f305-f516-43b7-ac85-2cb74a0b1221
+ref table d_products
+ref table product_category_name_translation
+ref table d_sellers
+ref table f_order_items
+ref table LocalDateTable_09ee2b65-b8ed-4056-aefb-af117d9c1ecb
+ref table d_customers
+ref table f_order_payments
+ref table f_order_reviews
+ref table LocalDateTable_164bc7b6-adb5-4989-a7ca-8313f5141cfd
+ref table LocalDateTable_14c414e7-40e0-423e-ba68-98be87b0344c
+ref table f_geolocation
+ref table _medidas
+ref table d_calendar
+ref table LocalDateTable_abbe6e3d-3bd9-4511-b5ef-ecddd9c0d9c0
+ref table LocalDateTable_877d8000-1a5e-40e0-962f-7d7b3b39af33
+ref table d_regioes
+ref table _medidas_prescritiva
+
+ref cultureInfo pt-BR
+

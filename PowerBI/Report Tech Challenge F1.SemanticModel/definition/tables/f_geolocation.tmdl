@@ -1,0 +1,113 @@
+table f_geolocation
+	lineageTag: 6fc5815b-4167-4158-aa5d-037948e6677c
+
+	column geolocation_zip_code_prefix
+		dataType: string
+		lineageTag: 5c67804c-babc-4936-9fc7-ac30156d111c
+		dataCategory: PostalCode
+		summarizeBy: none
+		sourceColumn: geolocation_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column geolocation_lat
+		dataType: double
+		lineageTag: 6fc123c7-80d9-4eda-9524-128c1d060db0
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: geolocation_lat
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column geolocation_lng
+		dataType: double
+		lineageTag: 76122aaa-237f-4a1e-afce-cc52ac319c5d
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: geolocation_lng
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column geolocation_city
+		dataType: string
+		lineageTag: 0684290c-9fdd-4bac-bb3f-d3204882de03
+		dataCategory: City
+		summarizeBy: none
+		sourceColumn: geolocation_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column geolocation_state
+		dataType: string
+		lineageTag: b78ae0ae-b9bd-4996-a919-c47d9dc234a5
+		dataCategory: StateOrProvince
+		summarizeBy: none
+		sourceColumn: geolocation_state
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column regiao
+		dataType: string
+		lineageTag: 1e1cc8e0-a544-4773-b922-82b7dfc722de
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: regiao
+
+		annotation SummarizationSetBy = Automatic
+
+	column pais
+		dataType: string
+		lineageTag: 52cd36e2-b321-4262-b51f-49ba008c4b8d
+		dataCategory: Country
+		summarizeBy: none
+		sourceColumn: pais
+
+		annotation SummarizationSetBy = Automatic
+
+	hierarchy Hierarquia
+		lineageTag: 0913c326-f49e-4a0a-8d64-7a168b629c43
+
+		level pais
+			lineageTag: 6f9e355b-0bd0-4d42-832b-53b7bf422eed
+			column: pais
+
+		level regiao
+			lineageTag: 76f06ce0-ac25-469a-8471-7e965ea929c8
+			column: regiao
+
+		level geolocation_state
+			lineageTag: 168f8435-5994-4cf8-af09-093bfa722d1d
+			column: geolocation_state
+
+		level geolocation_city
+			lineageTag: 75c8e9f2-93b3-40a2-bdba-e98b988e0a6c
+			column: geolocation_city
+
+		level geolocation_zip_code_prefix
+			lineageTag: b4ad3aee-fd06-4d79-a77b-47066a625f47
+			column: geolocation_zip_code_prefix
+
+	partition f_geolocation = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents(Pasta&"olist_geolocation_dataset.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Cabeçalhos Promovidos",".",",",Replacer.ReplaceText,{"geolocation_lat", "geolocation_lng"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído",{{"geolocation_zip_code_prefix", type text}, {"geolocation_lat", type number}, {"geolocation_lng", type number}, {"geolocation_city", type text}, {"geolocation_state", type text}}),
+				    #"Consultas Mescladas" = Table.NestedJoin(#"Tipo Alterado", {"geolocation_state"}, d_regioes, {"UF"}, "d_regioes", JoinKind.LeftOuter),
+				    #"d_regioes Expandido" = Table.ExpandTableColumn(#"Consultas Mescladas", "d_regioes", {"Região"}, {"regiao"}),
+				    #"Personalização Adicionada" = Table.AddColumn(#"d_regioes Expandido", "pais", each "Brasil")
+				in
+				    #"Personalização Adicionada"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
